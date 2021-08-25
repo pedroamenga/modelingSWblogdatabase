@@ -10,7 +10,7 @@ Base = declarative_base()
 
 class User(Base):
     __tablename__ = 'usuario'
-    mail = Column(String(50), primary_key=True)
+    mail = Column(String(50), primary_key=True, ForeignKey())
     name = Column(String(50))
     password = Column(String(50))
 
@@ -40,14 +40,14 @@ class Vehiculos(Base):
     vehicle_mass = Column(String)
     lenght = Column(Float)
     manufactura = Column(String(50), ForeignKey("planeta.name"))
-
+    
 class ListaFavoritos(Base):
     __tablename__ = 'favoritos'
     id = Column(Integer, primary_key=True)
     mail_usuario = Column(String(50), ForeignKey("usuario.mail"))
     favorito_personaje = Column(String(50) ForeignKey("personaje.name"))
     favorito_planeta = Column(String(50) ForeignKey("planeta.name"))
-    relacionPersonaje = relationship("User")
+    relacionPersonaje = relationship("User", "planeta", "personaje", "usuario")
 
     def to_dict(self):
         return {}
