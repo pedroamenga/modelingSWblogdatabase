@@ -10,17 +10,18 @@ Base = declarative_base()
 
 class User(Base):
     __tablename__ = 'usuario'
-    mail = Column(String(50), primary_key=True, ForeignKey())
-    name = Column(String(50))
+    mail = Column(String(50), primary_key=True)
+    user_name = Column(String(50), ForeignKey("listafavoritos.id"))
     password = Column(String(50))
+    relasionUser = relationship("ListaFavoritos")
 
 class Personaje(Base):
     __tablename__ = 'personaje'
     id = Column(Integer, primary_key=True)
     name = Column(String(50), nullable=False)
     gender = Column(String(50))
-    mass = Column(Float)
     height = Column(Integer)
+    mass = Column(Float)
     homeworld = Column(String(50), ForeignKey("planeta.name"))
     
 class Planeta(Base):
@@ -31,23 +32,21 @@ class Planeta(Base):
     diameter = Column(Integer)
     climate = Column(String(50))
     relacionPersonaje = relationship("Personaje")
-    relacionVehiculo = relationship("Vehiculo")
 
 class Vehiculos(Base):
     __tablename__ = 'vehiculos'
-    name = Column(String(50), primary_key=True)
-    model = Column(String(50))
-    vehicle_mass = Column(String)
-    lenght = Column(Float)
-    manufactura = Column(String(50), ForeignKey("planeta.name"))
-    
+    pilot_uid = Column(String(50), primary_key=True)
+    name = Column(String(50), ForeignKey("personaje.name"), nullable=False)
+    relacionVehiculo = relationship("Personaje")
+      
 class ListaFavoritos(Base):
     __tablename__ = 'favoritos'
     id = Column(Integer, primary_key=True)
     mail_usuario = Column(String(50), ForeignKey("usuario.mail"))
-    favorito_personaje = Column(String(50) ForeignKey("personaje.name"))
-    favorito_planeta = Column(String(50) ForeignKey("planeta.name"))
-    relacionPersonaje = relationship("User", "planeta", "personaje", "usuario")
+    Personaje = Column(String(50) ForeignKey("personaje.name"))
+    Planeta = Column(String(50) ForeignKey("planeta.name"))
+    Vehiculo = Column(String(50) ForeignKey("planeta.name"))
+
 
     def to_dict(self):
         return {}
